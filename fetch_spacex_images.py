@@ -25,9 +25,9 @@ def fetch_spacex_photos(launch_id=None, folder='images', filename_number='spacex
 
 def main():
     parser = argparse.ArgumentParser(description='Скачивание фото запусков SpaceX')
-    parser.add_argument('--id', help='ID запуска (например: 5eb87d42ffd86e000604b384)\n''Оставьте пустым для последнего запуска')
-    parser.add_argument('--folder', default='spacex_images', help='Папка для сохранения')
-    parser.add_argument('--filename_number', default='spacex', help='Имя файлов')
+    parser.add_argument('--id', metavar='', help='ID запуска (например: 5eb87d42ffd86e000604b384)\n''Оставьте пустым для последнего запуска')
+    parser.add_argument('--folder', default='spacex_images', metavar='', help='Папка для сохранения')
+    parser.add_argument('--filename_number', default='spacex', metavar='', help='Имя файлов')
     args = parser.parse_args()
     
     fetch_spacex_photos(args.id, args.folder, args.filename_number)
