@@ -1,10 +1,11 @@
+import argparse
 import os
 from dotenv import load_dotenv
 import requests
 from download_utils import download_images
 
 
-def fetch_epic_photos(api_key):
+def fetch_epic_photos(api_key, folder, filename_number):
     """Получает фото EPIC"""
     url = 'https://api.nasa.gov/EPIC/api/natural/images'
     params = {
@@ -23,18 +24,35 @@ def fetch_epic_photos(api_key):
             url = f"https://epic.gsfc.nasa.gov/archive/natural/{date_part}/png/{image_name}.png"
             image_urls.append(url)
         
-
+        print(f'Скачиваю...')
         download_images(
             image_urls=image_urls[:10],
-            folder='epic_images',
-            filename_number='epic_photo'
+            folder=folder,
+            filename_number=filename_number
         )
+        print('Готово!')
     except requests.exceptions.RequestException as e:
         print(f'Ошибка запроса к NASA API: {e}')
     except Exception as e:
         print(f'Непредвиденная ошибка: {e}')
 
-if __name__ == '__main__':
+def main():
     load_dotenv()
-    NASA_API = os.getenv('NASA_API')
-    fetch_epic_photos(NASA_API)
+
+    parser = argparse.ArgumentParser(description='Скачивание фото EPIC')
+    parser.add_argument('--key', default=os.getenv('NASA_API'), help='NASA API ключ')
+    parser.add_argument('--folder', default='epic_images', metavar='', help='Папка для сохранения')
+    parser.add_argument('--filename_number', default='epic_photo', metavar='', help='Имя файлов (по умолчанию: epic_photo)')
+    args = parser.parse_args()
+
+    if not args.key:
+        raise ValueError('API ключ должен быть указан через --key или в .env файле')
+
+    fetch_epic_photos(
+        api_key=args.key,
+        folder=args.folder,
+        filename_number=args.filename_number
+    )
+
+if __name__ == '__main__':
+    main()
