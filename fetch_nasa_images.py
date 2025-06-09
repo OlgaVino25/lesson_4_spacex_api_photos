@@ -38,9 +38,9 @@ def main():
 
     parser = argparse.ArgumentParser(description='Скачивание фото NASA')
     parser.add_argument('--key', default=os.getenv('NASA_API'), help='NASA API ключ')
-    parser.add_argument('--folder', default='nasa_images', help='Папка для сохранения')
-    parser.add_argument('--filename_number', default='nasa', help='Имя файлов (по умолчанию: nasa)')
-    parser.add_argument('--count', type=int, default=30, help='Количество фото')
+    parser.add_argument('--folder', default='nasa_images', metavar='', help='Папка для сохранения')
+    parser.add_argument('--filename_number', default='nasa', metavar='', help='Имя файлов (по умолчанию: nasa)')
+    parser.add_argument('--count', type=int, default=30, metavar='', help='Количество фото')
     args = parser.parse_args()
 
     if not args.key:
