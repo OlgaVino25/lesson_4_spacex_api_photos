@@ -5,6 +5,28 @@ import os
 from dotenv import load_dotenv
 from telegram import Bot
 def main():
+    """
+    Telegram Bot для отправки сообщений и изображений в группу/канал.
+
+    Этот скрипт позволяет отправлять текстовые сообщения и изображения через Telegram-бота.
+    Поддерживает загрузку файлов с локального диска и отправку сообщений с произвольным текстом.
+
+    Args:
+        --token (str): Токен Telegram-бота (можно указать в .env как TG_BOT_TOKEN)
+        --chat_id (str): ID группы/канала для отправки сообщений (можно указать в .env как TG_GROUP_CHAT_ID)
+        --text (str): Текст сообщения для отправки
+        --photo (str): Путь к файлу изображения для отправки
+        --caption (str): Описание к отправляемому изображению
+
+    Raises:
+        ValueError: Если не указан токен бота или chat_id
+        FileNotFoundError: Если указанный файл изображения не найден
+        TelegramError: При ошибках при отправке сообщений через Telegram API
+
+    Examples:
+        python tg_bot.py --text "Привет, группа!"
+        python tg_bot.py --photo images/space.jpg --caption "Космический снимок"
+    """
     load_dotenv()
 
     parser = argparse.ArgumentParser(description='Отправка сообщений в Telegram через бота CosmoPicBot')
