@@ -6,7 +6,26 @@ from download_utils import download_images
 
 
 def fetch_nasa_photos(api_key, folder, filename_number, count=30):
-    """Получает фото NASA"""
+    """
+    Скачивает изображения NASA API.
+
+    Этот скрипт запрашивает данные из NASA API EPIC и скачивает до 10 последних фотографий Земли в формате PNG.
+
+    Args:
+        api_key (str): Ключ API NASA
+        folder (str): Папка для сохранения изображений
+        filename_number (str): Префикс имени файла для сохраненных изображений
+        count (int): Количество изображений для загрузки (по умолчанию 30)
+
+    Raises:
+        ValueError: Если API ключ не указан
+
+    Returns:
+        None
+
+    Example:
+        python nasa_downloader.py --key YOUR_API_KEY --folder nasa_images --filename_number nasa --count 30
+    """
     url = 'https://api.nasa.gov/planetary/apod'
     params = {
         'api_key': api_key,
