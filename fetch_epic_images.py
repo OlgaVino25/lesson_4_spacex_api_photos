@@ -6,7 +6,25 @@ from download_utils import download_images
 
 
 def fetch_epic_photos(api_key, folder, filename_number):
-    """Получает фото EPIC"""
+    """
+    Скачивает последние фотографии Земли NASA API.
+
+    Этот скрипт запрашивает данные из NASA API EPIC и скачивает до 10 последних фотографий Земли в формате PNG.
+
+    Args:
+        api_key (str): Ключ API NASA
+        folder (str): Папка для сохранения изображений
+        filename_number (str): Префикс имени файла для сохраненных изображений
+
+    Raises:
+        ValueError: Если API ключ не указан
+
+    Returns:
+        None
+
+    Example:
+        python epic_downloader.py --key your_nasa_api_key --folder epic_images --filename_number epic_photo
+    """
     url = 'https://api.nasa.gov/EPIC/api/natural/images'
     params = {
         'api_key': api_key
