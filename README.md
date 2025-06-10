@@ -90,6 +90,8 @@ python fetch_epic_images.py --help      # NASA EPIC
 ```bash
 python publication_tg_bot.py --help
 ```
+![Снимок экрана 2025-06-10 133421](https://github.com/user-attachments/assets/ae06d403-aff3-47ab-b55d-0c2bb8d7cf23)
+
 
 ### Цель проекта
 
