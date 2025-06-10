@@ -4,7 +4,38 @@ from download_utils import download_images
 
 
 def fetch_spacex_photos(launch_id=None, folder='images', filename_number='spacex'):
-    """Получает фото запуска SpaceX"""
+    """
+    Скачивает фотографии запусков SpaceX с помощью официального API.
+
+    Этот скрипт позволяет загружать оригинальные фотографии с запусков SpaceX.
+    По умолчанию скачивает фото последнего запуска, но можно указать конкретный ID.
+
+    Args:
+        launch_id (str, optional): ID запуска SpaceX. Если не указан, скачивает фото
+            последнего запуска. Пример ID: '5eb87d42ffd86e000604b384'
+        folder (str, optional): Путь к папке для сохранения фотографий
+        filename_number (str, optional): Префикс имени файлов
+
+    Returns:
+        None
+
+    Raises:
+        requests.exceptions.RequestException: При ошибке запроса к API SpaceX.
+        Exception: При других непредвиденных ошибках.
+
+    Examples:
+        # Скачивание фото последнего запуска
+        python script.py
+
+        # Скачивание фото конкретного запуска
+        python script.py --id 5eb87d42ffd86e000604b384
+
+        # Изменение папки сохранения
+        python script.py --folder custom_folder
+
+        # Изменение префикса файлов
+        python script.py --filename_number custom_prefix
+    """
     api_url = f'https://api.spacexdata.com/v5/launches/{launch_id or "latest"}'
 
     try:
