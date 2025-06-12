@@ -7,6 +7,43 @@ from telegram import Bot
 from telegram.error import TelegramError
 
 
+def validate(token, chat_id):
+    """Проверяет наличие обязательных параметров для Telegram API.
+    
+    Args:
+        token (str): Токен Telegram-бота
+        chat_id (str): ID чата/канала
+        
+    Raises:
+        ValueError: Если не указан токен или chat_id
+    """
+    if not token:
+        raise ValueError('Не указан токен бота!')
+    if not chat_id:
+        raise ValueError('Не указан chat_id!')
+
+
+def handle_telegram_errors(e):
+    """Обрабатывает ошибки Telegram API и преобразует в понятные исключения.
+    
+    Args:
+        e (TelegramError): Исходное исключение
+        
+    Raises:
+        ValueError: Для ошибок связанных с чатом или форматом
+        PermissionError: Для ошибок доступа
+        RuntimeError: Для других ошибок API
+    """
+    if "Chat not found" in str(e):
+        raise ValueError(f"Чат {chat_id} не существует или бот не добавлен в него") from e
+    elif "Forbidden" in str(e):
+        raise PermissionError("Бот заблокирован в этом чате") from e
+    elif "Too Many Requests" in str(e):
+        raise RuntimeError("Превышен лимит запросов. Повторите через 10 минут") from e
+    else:
+        raise RuntimeError(f"Ошибка отправки: {e}") from e
+
+
 def send_massage(token, chat_id, text):
     """Отправляет текстовое сообщение в Telegram чат/канал.
     
@@ -19,24 +56,13 @@ def send_massage(token, chat_id, text):
         ValueError: Если не указан токен или chat_id
         TelegramError: При ошибках API Telegram
     """
-    if not token:
-        raise ValueError('Не указан токен бота!')
-    if not chat_id:
-        raise ValueError('Не указан chat_id!')
-
+    validate(token, chat_id)
     bot = Bot(token=token)
 
     try:
         bot.send_message(chat_id=chat_id, text=text)
     except TelegramError as e:
-        if "Chat not found" in str(e):
-            raise ValueError(f"Чат {chat_id} не существует или бот не добавлен в него") from e
-        elif "Forbidden" in str(e):
-            raise PermissionError("Бот заблокирован в этом чате") from e
-        elif "Too Many Requests" in str(e):
-            raise RuntimeError("Превышен лимит запросов. Повторите через 10 минут") from e
-        else:
-            raise RuntimeError(f"Ошибка отправки: {e}") from e
+        handle_telegram_errors(e)
 
 
 def send_photo(token, chat_id, photo_path, caption=None):
@@ -52,11 +78,7 @@ def send_photo(token, chat_id, photo_path, caption=None):
         FileNotFoundError: Если файл не найден
         TelegramError: При ошибках API Telegram
     """
-    if not token:
-        raise ValueError('Не указан токен бота!')
-    if not chat_id:
-        raise ValueError('Не указан chat_id!')
-
+    validate(token, chat_id)
     bot = Bot(token=token)
 
     try:
@@ -65,12 +87,7 @@ def send_photo(token, chat_id, photo_path, caption=None):
     except FileNotFoundError:
         raise FileNotFoundError(f"Файл '{photo_path}' не найден. Проверьте путь и права доступа") from None
     except TelegramError as e:
-        if "Wrong file identifier/HTTP URL specified" in str(e):
-            raise ValueError("Недопустимый формат файла. Поддерживаются JPG/PNG до 10MB") from e
-        elif "Photo caption too long" in str(e):
-            raise ValueError("Подпись к фото не должна превышать 1024 символа") from e
-        else:
-            raise RuntimeError(f"Ошибка отправки фото: {e}") from e
+        handle_photo_errors(e)
 
 
 def main():
