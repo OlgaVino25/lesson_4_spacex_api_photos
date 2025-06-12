@@ -49,10 +49,13 @@ def fetch_spacex_photos(launch_id=None, folder='images', filename_prefix='spacex
             print('Готово!')
         else:
             print(f'Фото не найдены для запуска {launch_id or "latest"}')
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            print(f'Ошибка: Запуск с ID "{launch_id}" не найден. Проверьте правильность идентификатора')
+        else:
+            print(f'Ошибка API SpaceX ({e.response.status_code}): {e.response.reason}')
     except requests.exceptions.RequestException as e:
-        print(f'Ошибка при запросе к API SpaceX: {e}')
-    except Exception as e:
-        print(f'Непредвиденная ошибка: {e}')
+        print(f'Ошибка: {e}')
 
 def main():
     parser = argparse.ArgumentParser(description='Скачивание фото запусков SpaceX')
