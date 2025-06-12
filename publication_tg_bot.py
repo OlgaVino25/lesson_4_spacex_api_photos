@@ -35,6 +35,9 @@ def publish_photos(
 
             for photo_path in photos:
                 try:
+                    if not photo_path.exists():
+                        raise FileNotFoundError(f"Файл {photo_path} не найден")
+                    
                     send_photo(
                         token=token,
                         chat_id=chat_id,
@@ -42,11 +45,28 @@ def publish_photos(
                         caption=caption
                     )
                     print(f"Успешно опубликовано: {photo_path}")
+                except (ConnectionError, requests.exceptions.RequestException) as e:
+                    print(f"Сетевая ошибка при отправке {photo_path}: {e}")
+                    time.sleep(300)
+                except (IOError, OSError, FileNotFoundError) as e:
+                    print(f"Ошибка доступа к файлу {photo_path}: {e}")
+                except telegram.error.TelegramError as e:
+                    print(f"Ошибка Telegram API ({e.__class__.__name__}): {e}")
+                    if "retry after" in str(e).lower():
+                        sleep_time = int(e.retry_after) if hasattr(e, 'retry_after') else 60
+                        time.sleep(sleep_time)
                 except Exception as e:
-                    print(f"Ошибка при отправке {photo_path}: {e}")
+                    print(f"Неожиданная ошибка при отправке {photo_path}: {e}")
+                    raise
 
                 time.sleep(interval_hours * 3600)
 
+        except (OSError, FileNotFoundError) as e:
+            print(f"Ошибка доступа к директории: {e}. Перезапуск через 5 минут")
+            time.sleep(300)
+        except KeyboardInterrupt:
+            print("\nРабота приложения прервана пользователем")
+            break
         except Exception as e:
             print(f"Критическая ошибка: {e}. Перезапуск через 5 минут")
             time.sleep(300)
