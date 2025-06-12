@@ -30,10 +30,10 @@ def fetch_epic_photos(api_key, folder, filename_prefix):
     try:
         response = requests.get(url, params=params)
         response.raise_for_status()
-        epic_data = response.json()
+        earth_images_metadata = response.json()
 
         image_urls = []
-        for item in epic_data:
+        for item in earth_images_metadata:
             date_part = item['date'].split()[0].replace('-', '/')
             image_name = item['image']
             url = f"https://epic.gsfc.nasa.gov/archive/natural/{date_part}/png/{image_name}.png"
