@@ -71,9 +71,14 @@ def publish_photos(
             print(f"Критическая ошибка: {e}. Перезапуск через 5 минут")
             time.sleep(300)
 
-def main():
-    load_dotenv()
+
+def parse_arguments():
+    """Парсит аргументы командной строки и переменные окружения.
     
+    Returns:
+        Namespace: Объект с аргументами командной строки
+    """
+    load_dotenv()
     parser = argparse.ArgumentParser(description='Автоматическая публикация фотографий в Telegram')
     parser.add_argument('--token', default=os.getenv('CosmoPicBot_TG_TOKEN'), metavar='', help='Telegram Bot Token (или укажите в TG_BOT_TOKEN в .env)')
     parser.add_argument('--chat_id', default=os.getenv('GROUP_CHAT_ID'), metavar='', help='ID группы/чата (или укажите в TG_GROUP_CHAT_ID в .env)')
@@ -82,6 +87,9 @@ def main():
     parser.add_argument( '--caption', metavar='', help='Подпись для фотографий')
     parser.add_argument( '--shuffle', action='store_true', help='Перемешивать фотографии перед отправкой')
     args = parser.parse_args()
+    return args
+def main():
+    args = parse_arguments()    
 
     publish_photos(
         directory=args.dir,
