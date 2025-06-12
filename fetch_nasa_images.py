@@ -62,7 +62,16 @@ def fetch_nasa_photos(api_key, folder, filename_prefix, count=30):
         print(f"Критическая ошибка: {str(e)}")
         raise
 
-def main():
+
+def parse_arguments():
+    """Парсит аргументы командной строки и загружает переменные окружения.
+    
+    Returns:
+        Namespace: Объект с аргументами командной строки
+        
+    Raises:
+        ValueError: Если не указан API ключ
+    """
     load_dotenv()
 
     parser = argparse.ArgumentParser(description='Скачивание фото NASA')
@@ -74,6 +83,10 @@ def main():
 
     if not args.key:
         raise ValueError('API ключ должен быть указан через --key или в .env файле')
+    return args
+
+def main():
+    args = parse_arguments()    
     
     fetch_nasa_photos(
         api_key=args.key,
