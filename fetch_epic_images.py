@@ -5,7 +5,7 @@ import requests
 from download_utils import download_images
 
 
-def fetch_epic_photos(api_key, folder, filename_number):
+def fetch_epic_photos(api_key, folder, filename_prefix):
     """
     Скачивает последние фотографии Земли NASA API.
 
@@ -14,7 +14,7 @@ def fetch_epic_photos(api_key, folder, filename_number):
     Args:
         api_key (str): Ключ API NASA
         folder (str): Папка для сохранения изображений
-        filename_number (str): Префикс имени файла для сохраненных изображений
+        filename_prefix (str): Префикс имени файла для сохраненных изображений
 
     Raises:
         ValueError: Если API ключ не указан
@@ -23,7 +23,7 @@ def fetch_epic_photos(api_key, folder, filename_number):
         None
 
     Example:
-        python epic_downloader.py --key your_nasa_api_key --folder epic_images --filename_number epic_photo
+        python epic_downloader.py --key your_nasa_api_key --folder epic_images --filename_prefix epic_photo
     """
     url = 'https://api.nasa.gov/EPIC/api/natural/images'
     params = {
@@ -46,7 +46,7 @@ def fetch_epic_photos(api_key, folder, filename_number):
         download_images(
             image_urls=image_urls[:10],
             folder=folder,
-            filename_number=filename_number
+            filename_prefix=filename_prefix
         )
         print('Готово!')
     except requests.exceptions.RequestException as e:
@@ -60,7 +60,7 @@ def main():
     parser = argparse.ArgumentParser(description='Скачивание фото EPIC')
     parser.add_argument('--key', default=os.getenv('NASA_API'), help='NASA API ключ')
     parser.add_argument('--folder', default='epic_images', metavar='', help='Папка для сохранения')
-    parser.add_argument('--filename_number', default='epic_photo', metavar='', help='Имя файлов (по умолчанию: epic_photo)')
+    parser.add_argument('--filename_prefix', default='epic_photo', metavar='', help='Имя файлов (по умолчанию: epic_photo)')
     args = parser.parse_args()
 
     if not args.key:
@@ -69,7 +69,7 @@ def main():
     fetch_epic_photos(
         api_key=args.key,
         folder=args.folder,
-        filename_number=args.filename_number
+        filename_prefix=args.filename_prefix
     )
 
 if __name__ == '__main__':
