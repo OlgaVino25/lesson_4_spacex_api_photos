@@ -16,14 +16,11 @@ def fetch_epic_photos(api_key, folder, filename_prefix):
         folder (str): Папка для сохранения изображений
         filename_prefix (str): Префикс имени файла для сохраненных изображений
 
-    Raises:
-        ValueError: Если API ключ не указан
-
     Returns:
         None
 
     Example:
-        python epic_downloader.py --key your_nasa_api_key --folder epic_images --filename_prefix epic_photo
+        python fetch_epic_images.py --key your_nasa_api_key --folder epic_images --filename_prefix epic_photo
     """
     url = 'https://api.nasa.gov/EPIC/api/natural/images'
     params = {
