@@ -17,14 +17,11 @@ def fetch_nasa_photos(api_key, folder, filename_prefix, count=30):
         filename_prefix (str): Префикс имени файла для сохраненных изображений
         count (int): Количество изображений для загрузки (по умолчанию 30)
 
-    Raises:
-        ValueError: Если API ключ не указан
-
     Returns:
         None
 
     Example:
-        python nasa_downloader.py --key YOUR_API_KEY --folder nasa_images --filename_prefix nasa --count 30
+        python fetch_nasa_images.py --key YOUR_API_KEY --folder nasa_images --filename_prefix nasa --count 30
     """
     url = 'https://api.nasa.gov/planetary/apod'
     params = {
