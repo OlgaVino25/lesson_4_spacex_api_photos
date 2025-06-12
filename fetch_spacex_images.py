@@ -57,12 +57,23 @@ def fetch_spacex_photos(launch_id=None, folder='images', filename_prefix='spacex
     except requests.exceptions.RequestException as e:
         print(f'Ошибка: {e}')
 
-def main():
+
+def parse_arguments():
+    """Парсит аргументы командной строки и загружает переменные окружения.
+    
+    Returns:
+        Namespace: Объект с аргументами командной строки
+        
+    """
     parser = argparse.ArgumentParser(description='Скачивание фото запусков SpaceX')
     parser.add_argument('--id', metavar='', help='ID запуска (например: 5eb87d42ffd86e000604b384)\n''Оставьте пустым для последнего запуска')
     parser.add_argument('--folder', default='spacex_images', metavar='', help='Папка для сохранения')
     parser.add_argument('--filename_prefix', default='spacex', metavar='', help='Имя файлов')
     args = parser.parse_args()
+    return args
+
+def main():
+    args = parse_arguments()
     
     fetch_spacex_photos(args.id, args.folder, args.filename_prefix)
 
