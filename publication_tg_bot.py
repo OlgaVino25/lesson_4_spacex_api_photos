@@ -77,7 +77,7 @@ def main():
     parser = argparse.ArgumentParser(description='Автоматическая публикация фотографий в Telegram')
     parser.add_argument('--token', default=os.getenv('CosmoPicBot_TG_TOKEN'), metavar='', help='Telegram Bot Token (или укажите в TG_BOT_TOKEN в .env)')
     parser.add_argument('--chat_id', default=os.getenv('GROUP_CHAT_ID'), metavar='', help='ID группы/чата (или укажите в TG_GROUP_CHAT_ID в .env)')
-    parser.add_argument('--dir', default='C:/DVMN/API_web_service/lesson_4', metavar='', help='Путь к директории с фотографиями (по умолчанию: "C:/DVMN/API_web_service/lesson_4")')
+    parser.add_argument('--dir', required=True, type=Path, metavar='Путь', help='Обязательный путь к директории с фотографиями')
     parser.add_argument('--interval', type=int, default=4, metavar='', help='Интервал публикации в часах (по умолчанию: 4)')
     parser.add_argument( '--caption', metavar='', help='Подпись для фотографий')
     parser.add_argument( '--shuffle', action='store_true', help='Перемешивать фотографии перед отправкой')
