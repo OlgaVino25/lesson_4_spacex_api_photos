@@ -25,5 +25,12 @@ def download_images(image_urls, folder, filename_prefix):
         
             with open(filepath, 'wb') as file:
                 file.write(response.content)
+        except requests.exceptions.RequestException as e:
+            print(f'Ошибка сети для {url}: {e}')
+        except (IOError, OSError) as e:
+            print(f'Ошибка записи файла {filename}: {e}')
+        except KeyError as e:
+            print(f'Некорректный URL {url}: {e}')
         except Exception as e:
-            print(f'Ошибка при загрузке {url}: {e}')
+            print(f'Неизвестная ошибка при обработке {url}: {e}')
+            raise
