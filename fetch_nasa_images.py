@@ -5,7 +5,7 @@ import requests
 from download_utils import download_images
 
 
-def fetch_nasa_photos(api_key, folder, filename_number, count=30):
+def fetch_nasa_photos(api_key, folder, filename_prefix, count=30):
     """
     Скачивает изображения NASA API.
 
@@ -14,7 +14,7 @@ def fetch_nasa_photos(api_key, folder, filename_number, count=30):
     Args:
         api_key (str): Ключ API NASA
         folder (str): Папка для сохранения изображений
-        filename_number (str): Префикс имени файла для сохраненных изображений
+        filename_prefix (str): Префикс имени файла для сохраненных изображений
         count (int): Количество изображений для загрузки (по умолчанию 30)
 
     Raises:
@@ -24,7 +24,7 @@ def fetch_nasa_photos(api_key, folder, filename_number, count=30):
         None
 
     Example:
-        python nasa_downloader.py --key YOUR_API_KEY --folder nasa_images --filename_number nasa --count 30
+        python nasa_downloader.py --key YOUR_API_KEY --folder nasa_images --filename_prefix nasa --count 30
     """
     url = 'https://api.nasa.gov/planetary/apod'
     params = {
@@ -44,7 +44,7 @@ def fetch_nasa_photos(api_key, folder, filename_number, count=30):
             download_images(
                 image_urls=image_urls,
                 folder=folder,
-                filename_number=filename_number
+                filename_prefix=filename_prefix
             )
             print('Готово!')
     except requests.exceptions.RequestException as e:
@@ -58,7 +58,7 @@ def main():
     parser = argparse.ArgumentParser(description='Скачивание фото NASA')
     parser.add_argument('--key', default=os.getenv('NASA_API'), help='NASA API ключ')
     parser.add_argument('--folder', default='nasa_images', metavar='', help='Папка для сохранения')
-    parser.add_argument('--filename_number', default='nasa', metavar='', help='Имя файлов (по умолчанию: nasa)')
+    parser.add_argument('--filename_prefix', default='nasa', metavar='', help='Имя файлов (по умолчанию: nasa)')
     parser.add_argument('--count', type=int, default=30, metavar='', help='Количество фото')
     args = parser.parse_args()
 
@@ -68,7 +68,7 @@ def main():
     fetch_nasa_photos(
         api_key=args.key,
         folder=args.folder,
-        filename_number=args.filename_number,
+        filename_prefix=args.filename_prefix,
         count=args.count
     )
 
