@@ -90,15 +90,26 @@ def send_photo(token, chat_id, photo_path, caption=None):
         handle_photo_errors(e)
 
 
-def main():
+def parse_arguments():
+    """Парсит аргументы командной строки и переменные окружения.
+    
+    Returns:
+        Namespace: Объект с аргументами командной строки
+    """
     load_dotenv()
-
+    
     parser = argparse.ArgumentParser(description='Отправка сообщений и фото в Telegram через бота CosmoPicBot')
-    parser.add_argument('--token', default=os.getenv('CosmoPicBot_TG_TOKEN'), metavar='', help='Telegram Bot Token (или укажите в TG_BOT_TOKEN в .env)')
-    parser.add_argument('--chat_id', default=os.getenv('GROUP_CHAT_ID'), metavar='', help='ID группы/чата (или укажите в TG_GROUP_CHAT_ID в .env)')
+    parser.add_argument('--token', default=os.getenv('CosmoPicBot_TG_TOKEN'), metavar='', 
+                       help='Telegram Bot Token (или укажите в TG_BOT_TOKEN в .env)')
+    parser.add_argument('--chat_id', default=os.getenv('GROUP_CHAT_ID'), metavar='', 
+                       help='ID группы/чата (или укажите в TG_GROUP_CHAT_ID в .env)')
     parser.add_argument('--text', metavar='', help='Текст сообщения для отправки')
     parser.add_argument('--photo', metavar='', help='Путь к фото для отправки в группу')
     parser.add_argument('--caption', metavar='', help='Описание для фото')
+    
+    return parser.parse_args()
+
+def main():
     args = parser.parse_args()
 
     if args.text:
