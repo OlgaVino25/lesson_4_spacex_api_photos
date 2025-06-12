@@ -16,6 +16,7 @@ def fetch_epic_photos(api_key, folder, filename_prefix):
         api_key (str): Ключ API NASA
         folder (str): Папка для сохранения изображений
         filename_prefix (str): Префикс имени файла для сохраненных изображений
+        MAX_DOWNLOADS (int): константа для ограничения количества загрузок
 
     Returns:
         None
@@ -41,9 +42,10 @@ def fetch_epic_photos(api_key, folder, filename_prefix):
             url = f"https://epic.gsfc.nasa.gov/archive/natural/{formatted_date}/png/{image_name}.png"
             image_urls.append(url)
         
+        MAX_DOWNLOADS = 10
         print(f'Скачиваю...')
         download_images(
-            image_urls=image_urls[:10],
+            image_urls=image_urls[:MAX_DOWNLOADS],
             folder=folder,
             filename_prefix=filename_prefix
         )
