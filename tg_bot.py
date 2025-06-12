@@ -99,18 +99,16 @@ def parse_arguments():
     load_dotenv()
     
     parser = argparse.ArgumentParser(description='Отправка сообщений и фото в Telegram через бота CosmoPicBot')
-    parser.add_argument('--token', default=os.getenv('CosmoPicBot_TG_TOKEN'), metavar='', 
-                       help='Telegram Bot Token (или укажите в TG_BOT_TOKEN в .env)')
-    parser.add_argument('--chat_id', default=os.getenv('GROUP_CHAT_ID'), metavar='', 
-                       help='ID группы/чата (или укажите в TG_GROUP_CHAT_ID в .env)')
+    parser.add_argument('--token', default=os.getenv('CosmoPicBot_TG_TOKEN'), metavar='', help='Telegram Bot Token (или укажите в TG_BOT_TOKEN в .env)')
+    parser.add_argument('--chat_id', default=os.getenv('GROUP_CHAT_ID'), metavar='', help='ID группы/чата (или укажите в TG_GROUP_CHAT_ID в .env)')
     parser.add_argument('--text', metavar='', help='Текст сообщения для отправки')
     parser.add_argument('--photo', metavar='', help='Путь к фото для отправки в группу')
     parser.add_argument('--caption', metavar='', help='Описание для фото')
-    
-    return parser.parse_args()
+    args = parser.parse_args()
+    return args
 
 def main():
-    args = parser.parse_args()
+    args = parse_arguments()
 
     if args.text:
         send_massage(token=args.token, chat_id=args.chat_id, text=args.text)
