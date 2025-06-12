@@ -46,10 +46,23 @@ def fetch_epic_photos(api_key, folder, filename_prefix):
             filename_prefix=filename_prefix
         )
         print('Готово!')
-    except requests.exceptions.RequestException as e:
-        print(f'Ошибка запроса к NASA API: {e}')
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 401:
+            print("Ошибка авторизации: недействительный NASA API ключ")
+            print("Проверьте правильность ключа: https://api.nasa.gov/")
+        elif e.response.status_code == 404:
+            print("Данные не найдены. Проверьте доступность изображений на сайте EPIC")
+        else:
+            print(f"Ошибка NASA API ({e.response.status_code}): {e.response.reason}")
+    except requests.exceptions.ConnectionError:
+        print("Ошибка подключения. Проверьте интернет-соединение")
+    except requests.exceptions.Timeout:
+        print("Превышено время ожидания. Повторите попытку позже")
+    except (KeyError, ValueError) as e:
+        print(f"Ошибка обработки данных: {str(e)}")
     except Exception as e:
-        print(f'Непредвиденная ошибка: {e}')
+        print(f"Критическая ошибка: {str(e)}")
+        raise
 
 def main():
     load_dotenv()
