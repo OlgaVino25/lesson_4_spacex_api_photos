@@ -68,7 +68,16 @@ def fetch_epic_photos(api_key, folder, filename_prefix):
         print(f"Критическая ошибка: {str(e)}")
         raise
 
-def main():
+
+def parse_arguments():
+    """Парсит аргументы командной строки и загружает переменные окружения.
+    
+    Returns:
+        Namespace: Объект с аргументами командной строки
+        
+    Raises:
+        ValueError: Если не указан API ключ
+    """
     load_dotenv()
 
     parser = argparse.ArgumentParser(description='Скачивание фото EPIC')
@@ -76,10 +85,13 @@ def main():
     parser.add_argument('--folder', default='epic_images', metavar='', help='Папка для сохранения')
     parser.add_argument('--filename_prefix', default='epic_photo', metavar='', help='Имя файлов (по умолчанию: epic_photo)')
     args = parser.parse_args()
-
     if not args.key:
         raise ValueError('API ключ должен быть указан через --key или в .env файле')
+    return args
 
+def main():
+    args = parse_arguments()
+    
     fetch_epic_photos(
         api_key=args.key,
         folder=args.folder,
