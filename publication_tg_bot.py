@@ -19,12 +19,12 @@ def collect_photos(directory: str) -> list:
     return photos
 
 def publish_photos(
-        directory: str,
+        directory: Path,
         interval_hours: int,
+        token: str,
+        chat_id: str,
         caption: str = None,
-        shuffle: bool = False,
-        token: str =os.getenv('CosmoPicBot_TG_TOKEN'),
-        chat_id: str = os.getenv('GROUP_CHAT_ID')
+        shuffle: bool = False
         ):
     """Основной цикл публикации фотографий"""
     while True:
@@ -83,7 +83,14 @@ def main():
     parser.add_argument( '--shuffle', action='store_true', help='Перемешивать фотографии перед отправкой')
     args = parser.parse_args()
 
-    publish_photos(directory=args.dir, interval_hours=args.interval, caption=args.caption, shuffle=args.shuffle, token=args.token, chat_id=args.chat_id)
+    publish_photos(
+        directory=args.dir,
+        interval_hours=args.interval,
+        caption=args.caption,
+        shuffle=args.shuffle,
+        token=args.token or os.getenv('CosmoPicBot_TG_TOKEN'),
+        chat_id=args.chat_id or os.getenv('GROUP_CHAT_ID')
+        )
 
 if __name__ == '__main__':
     main()
