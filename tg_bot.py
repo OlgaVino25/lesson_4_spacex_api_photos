@@ -29,7 +29,14 @@ def send_massage(token, chat_id, text):
     try:
         bot.send_message(chat_id=chat_id, text=text)
     except TelegramError as e:
-        raise TelegramError(f'Ошибка Telegram: {e}')
+        if "Chat not found" in str(e):
+            raise ValueError(f"Чат {chat_id} не существует или бот не добавлен в него") from e
+        elif "Forbidden" in str(e):
+            raise PermissionError("Бот заблокирован в этом чате") from e
+        elif "Too Many Requests" in str(e):
+            raise RuntimeError("Превышен лимит запросов. Повторите через 10 минут") from e
+        else:
+            raise RuntimeError(f"Ошибка отправки: {e}") from e
 
 
 def send_photo(token, chat_id, photo_path, caption=None):
@@ -56,9 +63,14 @@ def send_photo(token, chat_id, photo_path, caption=None):
         with open(photo_path, 'rb') as photo_file:
             bot.send_photo(chat_id=chat_id, photo=photo_file, caption=caption)
     except FileNotFoundError:
-        raise FileNotFoundError(f'Файл {photo_path} не найден!')
+        raise FileNotFoundError(f"Файл '{photo_path}' не найден. Проверьте путь и права доступа") from None
     except TelegramError as e:
-        raise TelegramError(f'Ошибка Telegram: {e}')
+        if "Wrong file identifier/HTTP URL specified" in str(e):
+            raise ValueError("Недопустимый формат файла. Поддерживаются JPG/PNG до 10MB") from e
+        elif "Photo caption too long" in str(e):
+            raise ValueError("Подпись к фото не должна превышать 1024 символа") from e
+        else:
+            raise RuntimeError(f"Ошибка отправки фото: {e}") from e
 
 
 def main():
@@ -75,7 +87,7 @@ def main():
     if args.text:
         send_massage(token=args.token, chat_id=args.chat_id, text=args.text)
         print('Сообщение отправлено!')
-    
+
     if args.photo:
         send_photo(token=args.token, chat_id=args.chat_id, photo_path=args.photo, caption=args.caption)
         print('Фото отправлено!')
