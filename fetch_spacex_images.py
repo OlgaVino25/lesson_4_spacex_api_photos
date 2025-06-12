@@ -25,16 +25,16 @@ def fetch_spacex_photos(launch_id=None, folder='images', filename_prefix='spacex
 
     Examples:
         # Скачивание фото последнего запуска
-        python script.py
+        python fetch_spacex_images.py
 
         # Скачивание фото конкретного запуска
-        python script.py --id 5eb87d42ffd86e000604b384
+        python fetch_spacex_images.py --id 5eb87d42ffd86e000604b384
 
         # Изменение папки сохранения
-        python script.py --folder custom_folder
+        python fetch_spacex_images.py --folder custom_folder
 
         # Изменение префикса файлов
-        python script.py --filename_prefix custom_prefix
+        python fetch_spacex_images.py --filename_prefix custom_prefix
     """
     api_url = f'https://api.spacexdata.com/v5/launches/{launch_id or "latest"}'
 
