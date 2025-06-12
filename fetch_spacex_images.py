@@ -3,7 +3,7 @@ import requests
 from download_utils import download_images
 
 
-def fetch_spacex_photos(launch_id=None, folder='images', filename_number='spacex'):
+def fetch_spacex_photos(launch_id=None, folder='images', filename_prefix='spacex'):
     """
     Скачивает фотографии запусков SpaceX с помощью официального API.
 
@@ -14,7 +14,7 @@ def fetch_spacex_photos(launch_id=None, folder='images', filename_number='spacex
         launch_id (str, optional): ID запуска SpaceX. Если не указан, скачивает фото
             последнего запуска. Пример ID: '5eb87d42ffd86e000604b384'
         folder (str, optional): Путь к папке для сохранения фотографий
-        filename_number (str, optional): Префикс имени файлов
+        filename_prefix (str, optional): Префикс имени файлов
 
     Returns:
         None
@@ -34,7 +34,7 @@ def fetch_spacex_photos(launch_id=None, folder='images', filename_number='spacex
         python script.py --folder custom_folder
 
         # Изменение префикса файлов
-        python script.py --filename_number custom_prefix
+        python script.py --filename_prefix custom_prefix
     """
     api_url = f'https://api.spacexdata.com/v5/launches/{launch_id or "latest"}'
 
@@ -45,7 +45,7 @@ def fetch_spacex_photos(launch_id=None, folder='images', filename_number='spacex
         photos = response.json().get('links', {}).get('flickr', {}).get('original', [])
         if photos:
             print(f'Найдено {len(photos)} фото. Скачиваю...')
-            download_images(photos, folder, filename_number)
+            download_images(photos, folder, filename_prefix)
             print('Готово!')
         else:
             print(f'Фото не найдены для запуска {launch_id or "latest"}')
@@ -58,10 +58,10 @@ def main():
     parser = argparse.ArgumentParser(description='Скачивание фото запусков SpaceX')
     parser.add_argument('--id', metavar='', help='ID запуска (например: 5eb87d42ffd86e000604b384)\n''Оставьте пустым для последнего запуска')
     parser.add_argument('--folder', default='spacex_images', metavar='', help='Папка для сохранения')
-    parser.add_argument('--filename_number', default='spacex', metavar='', help='Имя файлов')
+    parser.add_argument('--filename_prefix', default='spacex', metavar='', help='Имя файлов')
     args = parser.parse_args()
     
-    fetch_spacex_photos(args.id, args.folder, args.filename_number)
+    fetch_spacex_photos(args.id, args.folder, args.filename_prefix)
 
 if __name__ == '__main__':
     main()
