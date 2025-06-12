@@ -15,22 +15,37 @@ def download_images(image_urls, folder, filename_prefix):
     folder.mkdir(parents=True, exist_ok=True)
 
     for index, url in enumerate(image_urls, start=1):
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
+        response = requests.get(url)
+        response.raise_for_status()
+        ext = get_file_extension(url) or '.jpg'
+        filename = f'{filename_prefix}_{index}{ext}'
+        filepath = folder / filename
+    
+        with open(filepath, 'wb') as file:
+            file.write(response.content)
 
-            ext = get_file_extension(url) or '.jpg'
-            filename = f'{filename_prefix}_{index}{ext}'
-            filepath = folder / filename
-        
-            with open(filepath, 'wb') as file:
-                file.write(response.content)
+
+def handle_download_errors(image_urls, folder, filename_prefix):
+        """Обработка исключений"""
+        try:
+            download_images(image_urls, folder, filename_prefix)
         except requests.exceptions.RequestException as e:
-            print(f'Ошибка сети для {url}: {e}')
+            print(f'Ошибка сети: {e}')
         except (IOError, OSError) as e:
-            print(f'Ошибка записи файла {filename}: {e}')
+            print(f'Ошибка записи файла: {e}')
         except KeyError as e:
             print(f'Некорректный URL {url}: {e}')
         except Exception as e:
             print(f'Неизвестная ошибка при обработке {url}: {e}')
             raise
+
+if __name__ == '__main__':
+    try:
+        handle_download_errors(
+            image_urls=['https://example.com/image1.jpg'],
+            folder='downloads',
+            filename_prefix='image'
+        )
+    except Exception as e:
+        print(f'Программа завершена с ошибкой: {e}')
+        exit(1)
