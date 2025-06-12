@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 import requests
 from download_utils import download_images
+from datetime import datetime
 
 
 def fetch_epic_photos(api_key, folder, filename_prefix):
@@ -34,9 +35,10 @@ def fetch_epic_photos(api_key, folder, filename_prefix):
 
         image_urls = []
         for image_metadata in earth_images_metadata:
-            date_part = image_metadata['date'].split()[0].replace('-', '/')
+            capture_date = datetime.fromisoformat(image_metadata['date'])
+            formatted_date = capture_date.strftime('%Y/%m/%d')
             image_name = image_metadata['image']
-            url = f"https://epic.gsfc.nasa.gov/archive/natural/{date_part}/png/{image_name}.png"
+            url = f"https://epic.gsfc.nasa.gov/archive/natural/{formatted_date}/png/{image_name}.png"
             image_urls.append(url)
         
         print(f'Скачиваю...')
