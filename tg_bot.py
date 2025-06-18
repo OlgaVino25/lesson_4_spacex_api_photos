@@ -7,20 +7,44 @@ from telegram import Bot
 from telegram.error import TelegramError
 
 
-def validate(token, chat_id):
-    """Проверяет наличие обязательных параметров для Telegram API.
+def validate_token(token):
+    """Проверяет валидность Telegram-бота.
 
     Args:
         token (str): Токен Telegram-бота
+
+    Raises:
+        ValueError: Если не указан токен
+    """
+    if not token:
+        raise ValueError('Не указан токен бота!')
+
+
+def validate_chat_id(chat_id):
+    """Проверяет валидность ID чата/канала.
+
+    Args:
         chat_id (str): ID чата/канала
 
     Raises:
         ValueError: Если не указан токен или chat_id
     """
-    if not token:
-        raise ValueError('Не указан токен бота!')
     if not chat_id:
         raise ValueError('Не указан chat_id!')
+
+
+def validate_credentials(token, chat_id):
+    """Основная функция валидации параметров.
+
+    Args:
+        token (str): Токен Telegram-бота
+        chat_id (str): ID чата/канала
+    
+    Raises:
+        ValueError: При отсутствии любого из параметров
+    """
+    validate_token(token)
+    validate_chat_id(chat_id)
 
 
 def handle_telegram_errors(e):
@@ -56,7 +80,7 @@ def send_massage(token, chat_id, text):
         ValueError: Если не указан токен или chat_id
         TelegramError: При ошибках API Telegram
     """
-    validate(token, chat_id)
+    validate_credentials(token, chat_id)
     bot = Bot(token=token)
 
     try:
@@ -79,7 +103,7 @@ def send_photo(token, chat_id, photo_path, caption=None):
         FileNotFoundError: Если файл не найден
         TelegramError: При ошибках API Telegram
     """
-    validate(token, chat_id)
+    validate_credentials(token, chat_id)
     bot = Bot(token=token)
 
     try:
