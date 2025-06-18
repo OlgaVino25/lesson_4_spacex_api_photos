@@ -1,7 +1,7 @@
-import warnings
-warnings.filterwarnings('ignore', category=UserWarning, module='telegram.utils.request')
 import argparse
 import os
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning, module='telegram.utils.request')
 from dotenv import load_dotenv
 from telegram import Bot
 from telegram.error import TelegramError
@@ -9,11 +9,11 @@ from telegram.error import TelegramError
 
 def validate(token, chat_id):
     """Проверяет наличие обязательных параметров для Telegram API.
-    
+
     Args:
         token (str): Токен Telegram-бота
         chat_id (str): ID чата/канала
-        
+
     Raises:
         ValueError: Если не указан токен или chat_id
     """
@@ -25,10 +25,10 @@ def validate(token, chat_id):
 
 def handle_telegram_errors(e):
     """Обрабатывает ошибки Telegram API и преобразует в понятные исключения.
-    
+
     Args:
         e (TelegramError): Исходное исключение
-        
+
     Raises:
         ValueError: Для ошибок связанных с чатом или форматом
         PermissionError: Для ошибок доступа
@@ -46,7 +46,7 @@ def handle_telegram_errors(e):
 
 def send_massage(token, chat_id, text):
     """Отправляет текстовое сообщение в Telegram чат/канал.
-    
+
     Args:
         token (str): Токен Telegram-бота (можно указать в .env как TG_BOT_TOKEN)
         chat_id (str): ID чата/канала для отправки сообщений (можно указать в .env как TG_GROUP_CHAT_ID)
@@ -67,12 +67,13 @@ def send_massage(token, chat_id, text):
 
 def send_photo(token, chat_id, photo_path, caption=None):
     """Отправляет фото в Telegram чат/канал.
-    
+
     Args:
         token (str): Токен Telegram-бота (можно указать в .env как TG_BOT_TOKEN)
         chat_id (str): ID чата/канала для отправки сообщений (можно указать в .env как TG_GROUP_CHAT_ID)
         photo_path (str): Путь к файлу изображения
         caption (str, optional): Подпись к фото
+
     Raises:
         ValueError: Если не указан токен или chat_id
         FileNotFoundError: Если файл не найден
@@ -90,25 +91,30 @@ def send_photo(token, chat_id, photo_path, caption=None):
         handle_photo_errors(e)
 
 
-def parse_arguments():
+def parse_arguments(default_token=None, default_chat_id=None):
     """Парсит аргументы командной строки и переменные окружения.
-    
+
+    Args:
+        default_token: Значение token по умолчанию (из окружения)
+        default_chat_id: Значение chat_id по умолчанию (из окружения)
+
     Returns:
         Namespace: Объект с аргументами командной строки
     """
-    load_dotenv()
-    
     parser = argparse.ArgumentParser(description='Отправка сообщений и фото в Telegram через бота CosmoPicBot')
-    parser.add_argument('--token', default=os.getenv('CosmoPicBot_TG_TOKEN'), metavar='', help='Telegram Bot Token (или укажите в TG_BOT_TOKEN в .env)')
-    parser.add_argument('--chat_id', default=os.getenv('GROUP_CHAT_ID'), metavar='', help='ID группы/чата (или укажите в TG_GROUP_CHAT_ID в .env)')
+    parser.add_argument('--token', default=default_token, metavar='', help='Telegram Bot Token (или укажите в TG_BOT_TOKEN в .env)')
+    parser.add_argument('--chat_id', default=default_chat_id, metavar='', help='ID группы/чата (или укажите в TG_GROUP_CHAT_ID в .env)')
     parser.add_argument('--text', metavar='', help='Текст сообщения для отправки')
     parser.add_argument('--photo', metavar='', help='Путь к фото для отправки в группу')
     parser.add_argument('--caption', metavar='', help='Описание для фото')
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
+
 
 def main():
-    args = parse_arguments()
+    load_dotenv()
+    env_token = os.getenv('COSMO_BOT_TG_TOKEN')
+    env_chat_id = os.getenv('GROUP_CHAT_ID')
+    args = parse_arguments(default_token=env_token, default_chat_id=env_chat_id)
 
     if args.text:
         send_massage(token=args.token, chat_id=args.chat_id, text=args.text)
@@ -117,6 +123,7 @@ def main():
     if args.photo:
         send_photo(token=args.token, chat_id=args.chat_id, photo_path=args.photo, caption=args.caption)
         print('Фото отправлено!')
+
 
 if __name__ == '__main__':
     main()
