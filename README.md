@@ -43,10 +43,10 @@ venv\Scripts\activate     # Windows
 
 **Основные зависимости:**
 - `python = "3.12.4"`
-- `python-telegram-bot==13.0`
+- `python-telegram-bot==13.0` - библиотека для разработки Telegram-ботов на языке Python
 - `python-dotenv = 1.1.0` - для работы с переменными окружения
-- `requests = 2.32.3`
-- `urllib3 = 1.26.18`
+- `requests = 2.32.3` - библиотека для работы с HTTP-запросами в Python, которая упрощает взаимодействие с веб-сервисами и API
+- `urllib3 = 1.26.18` - библиотека для выполнения HTTP-запросов в Python, которая упрощает работу с соединениями и запросами
 
 Программа не будет работать без библиотеки `requests`, а она не входит в стандартную библиотеку `Python`. Поставьте её на свой компьютер с помощью [pip](https://dvmn.org/encyclopedia/pip/pip_basic_usage/).
 
@@ -57,7 +57,7 @@ pip install -r requirements.txt
 4. Проверьте установку
 ```bash
 python --version  # Должна быть версия Python 3*
-pip list          # Должны отобразиться python-dotenv и requests
+pip list          # Должны отобразиться все зависимости, описанные выше
 ```
 
 ## Настройка
