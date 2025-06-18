@@ -43,8 +43,10 @@ venv\Scripts\activate     # Windows
 
 **Основные зависимости:**
 - `python = "3.12.4"`
-- `python-dotenv = "*"` - для работы с переменными окружения
-- `python-telegram-bot = "==13.0"` - 
+- `python-telegram-bot==13.0`
+- `python-dotenv = 1.1.0` - для работы с переменными окружения
+- `requests = 2.32.3`
+- `urllib3 = 1.26.18`
 
 Программа не будет работать без библиотеки `requests`, а она не входит в стандартную библиотеку `Python`. Поставьте её на свой компьютер с помощью [pip](https://dvmn.org/encyclopedia/pip/pip_basic_usage/).
 
@@ -65,13 +67,13 @@ pip list          # Должны отобразиться python-dotenv и reque
 Переменные окружения придётся загружать вручную при каждом запуске терминала. Автоматизируйте процесс с помощью модуля [python-dotenv](https://pypi.org/project/python-dotenv/0.9.1/).
 
 **Переменные:**
-- NASA_API - токен доступа для работы с NASA API
-- TG_BOT_TOKEN - токен Telegram-бота
-- TG_GROUP_CHAT_ID - ID чата/канала для отправки сообщений (Добавьте бота в канал/чат)
+- NASA_API_KEY - ключ доступа для работы с NASA API. Зарегистрируйтесь на [api.nasa.gov](https://api.nasa.gov/) и сгенерируйте ключ.
+- COSMO_PIC_BOT_TG_TOKEN - токен Telegram-бота. Создайте бота через [@BotFather](https://t.me/BotFather) и скопируйте токен.
+- TG_GROUP_CHAT_ID - ID чата/канала для отправки сообщений (Добавьте бота в канал/чат). Используйте бота, чтобы узнать свой chat_id.
 
 1. Создать файл `.env` в корне проекта:
-- NASA_API=ваш_токен_здесь
-- TG_BOT_TOKEN=ваш_токен_здесь
+- NASA_API_KEY=ваш_ключ_здесь
+- COSMO_PIC_BOT_TG_TOKEN=ваш_токен_здесь
 - TG_GROUP_CHAT_ID=ваш_ID_здесь
 
 2. Добавьте `.env` в `.gitignore` чтобы не публиковать конфиденциальные данные.
