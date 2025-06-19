@@ -81,7 +81,7 @@ def main():
         folder=args.folder,
         filename_prefix=args.filename_prefix,
         max_downloads=args.max_downloads
-        )
+    )
 
 
 if __name__ == '__main__':
