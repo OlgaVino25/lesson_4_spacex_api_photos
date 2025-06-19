@@ -7,46 +7,6 @@ from telegram import Bot
 from telegram.error import TelegramError
 
 
-def validate_token(token):
-    """Проверяет валидность Telegram-бота.
-
-    Args:
-        token (str): Токен Telegram-бота
-
-    Raises:
-        ValueError: Если не указан токен
-    """
-    if not token:
-        raise ValueError('Не указан токен бота!')
-
-
-def validate_chat_id(chat_id):
-    """Проверяет валидность ID чата/канала.
-
-    Args:
-        chat_id (str): ID чата/канала
-
-    Raises:
-        ValueError: Если не указан токен или chat_id
-    """
-    if not chat_id:
-        raise ValueError('Не указан chat_id!')
-
-
-def validate_credentials(token, chat_id):
-    """Основная функция валидации параметров.
-
-    Args:
-        token (str): Токен Telegram-бота
-        chat_id (str): ID чата/канала
-    
-    Raises:
-        ValueError: При отсутствии любого из параметров
-    """
-    validate_token(token)
-    validate_chat_id(chat_id)
-
-
 def handle_telegram_errors(e):
     """Обрабатывает ошибки Telegram API и преобразует в понятные исключения.
 
@@ -138,7 +98,11 @@ def main():
     env_chat_id = os.getenv('GROUP_CHAT_ID')
     args = parse_arguments(default_token=env_token, default_chat_id=env_chat_id)
 
-    validate_credentials(args.token, args.chat_id)
+    if not args.token:
+        raise ValueError('Не указан токен бота!')
+    
+    if not args.chat_id:
+        raise ValueError('Не указан chat_id!')
 
     if args.text:
         send_massage(token=args.token, chat_id=args.chat_id, text=args.text)
