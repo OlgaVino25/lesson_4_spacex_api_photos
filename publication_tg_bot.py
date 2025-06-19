@@ -104,7 +104,7 @@ def main():
         shuffle=args.shuffle,
         token=args.token,
         chat_id=args.chat_id
-        )
+    )
 
 
 if __name__ == '__main__':
