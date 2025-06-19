@@ -80,7 +80,6 @@ def send_massage(token, chat_id, text):
         ValueError: Если не указан токен или chat_id
         TelegramError: При ошибках API Telegram
     """
-    validate_credentials(token, chat_id)
     bot = Bot(token=token)
 
     try:
@@ -103,7 +102,6 @@ def send_photo(token, chat_id, photo_path, caption=None):
         FileNotFoundError: Если файл не найден
         TelegramError: При ошибках API Telegram
     """
-    validate_credentials(token, chat_id)
     bot = Bot(token=token)
 
     try:
@@ -139,6 +137,8 @@ def main():
     env_token = os.getenv('COSMO_BOT_TG_TOKEN')
     env_chat_id = os.getenv('GROUP_CHAT_ID')
     args = parse_arguments(default_token=env_token, default_chat_id=env_chat_id)
+
+    validate_credentials(args.token, args.chat_id)
 
     if args.text:
         send_massage(token=args.token, chat_id=args.chat_id, text=args.text)
