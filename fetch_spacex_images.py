@@ -56,7 +56,7 @@ def main():
     fetch_spacex_photos(
         args.id, args.folder,
         args.filename_prefix
-        )
+    )
 
 
 if __name__ == '__main__':
