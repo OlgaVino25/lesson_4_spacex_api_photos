@@ -74,7 +74,7 @@ def main():
         folder=args.folder,
         filename_prefix=args.filename_prefix,
         count=args.count
-        )
+    )
 
 
 if __name__ == '__main__':
