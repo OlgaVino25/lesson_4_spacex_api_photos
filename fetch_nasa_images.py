@@ -32,14 +32,16 @@ def fetch_nasa_photos(api_key, folder, filename_prefix, count=30):
     apod_images = response.json()
     image_urls = [item['url'] for item in apod_images if item['media_type'] == 'image']
 
-    if image_urls:
-        print(f'Найдено {len(image_urls)} фото. Скачиваю...')
-        download_images(
-            image_urls=image_urls,
-            folder=folder,
-            filename_prefix=filename_prefix
-        )
-        print('Готово!')
+    if not image_urls:
+        return
+
+    print(f'Найдено {len(image_urls)} фото. Скачиваю...')
+    download_images(
+        image_urls=image_urls,
+        folder=folder,
+        filename_prefix=filename_prefix
+    )
+    print('Готово!')
 
 
 def parse_arguments(default_key=None, default_folder='nasa_images'):
