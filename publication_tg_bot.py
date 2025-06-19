@@ -37,9 +37,6 @@ def publish_photos(
 
             for photo_path in photos:
                 try:
-                    if not photo_path.exists():
-                        raise FileNotFoundError(f"Файл {photo_path} не найден")
-
                     send_photo(
                         token=token,
                         chat_id=chat_id,
